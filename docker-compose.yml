@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  spotbugs:
+    build:
+      context: .
+      dockerfile: spot/Dockerfile
+    container_name: spot_container
+    ports:
+      - "5000:5000"
+    volumes:
+      - shared-data:/shared
+
+  java_app:
+    build:
+      context: .
+      dockerfile: analyzer/Dockerfile
+    depends_on:
+      - spotbugs
+    container_name: analyzer_container
+    volumes:
+      - shared-data:/shared
+
+volumes:
+  shared-data:
