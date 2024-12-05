@@ -1,25 +1,100 @@
 version: '3.8'
-
 services:
   spotbugs:
     build:
       context: .
-      dockerfile: spot/Dockerfile
-    container_name: spot_container
-    ports:
-      - "5000:5000"
+      dockerfile: spotbugs/Dockerfile
+    container_name: spotbugs
     volumes:
-      - shared-data:/shared
+      - ./input:/input
+    command : ["python3", "spotbugs.py"]
 
-  java_app:
+  infer:
     build:
       context: .
-      dockerfile: analyzer/Dockerfile
-    depends_on:
-      - spotbugs
-    container_name: analyzer_container
+      dockerfile: infer/Dockerfile
+    container_name: infer
     volumes:
-      - shared-data:/shared
+      - ./input:/input
+    command : ["python3", "infer.py"]
 
-volumes:
-  shared-data:
+  ikos:
+    build:
+      context: .
+      dockerfile: ikos/Dockerfile
+    container_name: ikos
+    volumes:
+      - ./input:/input
+    command: ["python3", "ikos.py"]
+
+  bandit:
+    build:
+      context: .
+      dockerfile: bandit/Dockerfile
+    container_name: bandit
+    volumes:
+      - ./input:/input
+    command: ["python", "bandit.py"]
+
+  cppcheck:
+    build:
+      context: .
+      dockerfile: cppcheck/Dockerfile
+    container_name: cppcheck
+    volumes:
+      - ./input:/input
+    command: ["python3", "cppcheck.py"]
+  
+  devskim:
+    build:
+      context: .
+      dockerfile: devskim/Dockerfile
+    container_name: devskim
+    volumes:
+      - ./input:/input
+    command: ["python3", "devskim.py"]
+
+  semgrep:
+    build:
+      context: .
+      dockerfile: semgrep/Dockerfile
+    container_name: semgrep
+    volumes:
+      - ./input:/input
+    command: ["python3", "semgrep.py"]
+
+  framac:
+    build:
+      context: .
+      dockerfile: framac/Dockerfile
+    container_name: framac
+    volumes:
+      - ./input:/input
+    command: ["python3", "framac.py"]
+  
+  rats:
+    build:
+      context: .
+      dockerfile: rats/Dockerfile
+    container_name: rats
+    volumes:
+      - ./input:/input
+    command: ["python3", "rats.py"]
+
+  pylint:
+    build:
+      context: .
+      dockerfile: pylint/Dockerfile
+    container_name: pylint
+    volumes:
+      - ./input:/input
+    command: ["python3", "pylint.py"]
+
+  # sonarqube:
+  #   build:
+  #     context: .
+  #     dockerfile: sonarqube/Dockerfile
+  #   container_name: sonarqube
+  #   volumes:
+  #     - ./input:/input
+  #   command: ["python3", "sonarqube.py"]

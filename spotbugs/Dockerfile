@@ -1,5 +1,7 @@
-# OpenJDK 기반의 이미지 사용
 FROM python:3.9-slim
+
+RUN apt-get update && \
+    apt-get install -y openjdk-17-jdk
 
 # SpotBugs 설치
 RUN apt-get update && \
@@ -13,11 +15,6 @@ ENV SPOTBUGS_HOME /spotbugs-4.8.6
 ENV PATH $SPOTBUGS_HOME/bin:$PATH
 
 # 작업 디렉토리 설정
-WORKDIR /app
+WORKDIR /
 
-COPY spot /app
-
-RUN apt-get update && pip install flask && apt-get install -y openjdk-17-jdk
-
-# SpotBugs 실행
-CMD ["python", "spotbugs.py"]
+COPY /spotbugs /
