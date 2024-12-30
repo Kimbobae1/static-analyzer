@@ -1,18 +1,18 @@
 import os
 import subprocess
 
+# /input 디렉토리에서 파일 목록 가져오기
+input_dir = '/input'
+files = [f for f in os.listdir(input_dir) if os.path.isfile(os.path.join(input_dir, f))]
 
-# /input 디렉토리에서 파일 찾기
-file = next((f for f in os.listdir('/input') if os.path.isfile(os.path.join('/input/', f))), None)
-
-if not file:
-    print("파일 없음")
+if not files:
+    print("분석할 파일이 없습니다.")
 else:
-    file_path = os.path.join('input', file)
-    run_result = subprocess.run(["rats", "--resultsonly", "-w", "3", file_path], capture_output=True, text=True)
+    for file in files:
+        file_path = os.path.join(input_dir, file)
+        print(f"분석 중: {file}")
 
-    # 결과 출력
-    if run_result.returncode == 0:
+        # RATS로 파일 분석
+        run_result = subprocess.run(["rats", "--resultsonly", "-w", "3", file_path], capture_output=True, text=True)
+
         print(f"{file} 분석 결과:\n{run_result.stdout}\n{run_result.stderr}")
-    else:
-        print(f"{file} 분석 실패: {run_result.stderr}")
