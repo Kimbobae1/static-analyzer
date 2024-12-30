@@ -1,5 +1,3 @@
-
-
 import os
 import subprocess
 
@@ -26,9 +24,4 @@ else:
     if os.path.exists(class_file_path):
         os.remove(class_file_path)
 
-
-
-    if run_result.returncode == 0:
-        print(f"{main_class} 분석 결과:\n{run_result.stdout}")
-    else:
-        print(f"{main_class} 분석 실패: {run_result.stderr}")
+    print(f"{main_class} 분석 결과:\n{run_result.stdout}\n{run_result.stderr}")
